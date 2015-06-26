@@ -1,0 +1,5 @@
+*.suo
+*.user
+/SSDTDataGen/bin
+/SSDTDataGen/obj
+/packages
