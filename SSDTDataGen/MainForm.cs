@@ -47,7 +47,8 @@ namespace SSDTDataGen
 			SET IDENTITY_INSERT {0} OFF
 			GO";
 
-		public const string ConnectionString = @"Data Source={0};Initial Catalog={1};Integrated Security=True;";
+		public const string ConnectionStringTrusted = @"Data Source={0};Initial Catalog={1};Integrated Security=True;";
+		public const string ConnectionStringUntrusted = @"Data Source={0};Initial Catalog={1};uid={2};pwd={3};";
 		#endregion Constants
 
 		public MainForm()
@@ -57,12 +58,14 @@ namespace SSDTDataGen
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
-
+			System.Data.Sql.SqlDataSourceEnumerator instance = System.Data.Sql.SqlDataSourceEnumerator.Instance;
+			System.Data.DataTable dataTable = instance.GetDataSources();
+			int count = dataTable.Rows.Count;
 		}
 
 		private void serverRefreshButton_Click(object sender, EventArgs e)
 		{
-			using (SqlConnection connection = new SqlConnection(string.Format(ConnectionString, serverAddressTextBox.Text, "master")))
+			using (SqlConnection connection = new SqlConnection(GetConnectionString()))
 			{
 				connection.Open();
 				DataTable databases = connection.GetSchema("Databases");
@@ -76,7 +79,7 @@ namespace SSDTDataGen
 
 		private void databaseDDL_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			using (SqlConnection connection = new SqlConnection(string.Format(ConnectionString, serverAddressTextBox.Text, databaseDDL.SelectedItem)))
+			using (SqlConnection connection = new SqlConnection(GetConnectionString()))
 			{
 				connection.Open();
 				DataTable schema = connection.GetSchema("Tables");
@@ -92,6 +95,7 @@ namespace SSDTDataGen
 				}
 
 				TableNames = (from tn in TableNames orderby tn select tn).ToList();
+				SchemaNames = (from sn in SchemaNames orderby sn select sn).ToList();
 				SchemaDDL.Items.AddRange(SchemaNames.ToArray());
 				TableDDL.Items.AddRange(TableNames.ToArray());
 			}
@@ -99,7 +103,7 @@ namespace SSDTDataGen
 
 		private void SchemaDDL_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			using (SqlConnection connection = new SqlConnection(string.Format(ConnectionString, serverAddressTextBox.Text, databaseDDL.SelectedItem)))
+			using (SqlConnection connection = new SqlConnection(GetConnectionString()))
 			{
 				connection.Open();
 				DataTable schema = connection.GetSchema("Tables");
@@ -129,7 +133,7 @@ namespace SSDTDataGen
 			List<string> columns = new List<string>();
 			List<string> primaryKey = new List<string>();
 			string values = string.Empty;
-			using (SqlConnection connection = new SqlConnection(string.Format(ConnectionString, serverAddressTextBox.Text, databaseDDL.SelectedItem)))
+			using (SqlConnection connection = new SqlConnection(GetConnectionString()))
 			{
 				connection.Open();
 				DataColumnCollection c = GetPrimaryKeys(connection, tableName);
@@ -250,8 +254,23 @@ namespace SSDTDataGen
 				UpdateStatement.Append(string.Format("{0} = Source.{0}", column));
 				UpdateStatement.Append(",");
 			}
-			UpdateStatement.Remove(UpdateStatement.Length - 1, 1);
+			if (UpdateStatement.Length > 0)
+			{
+				UpdateStatement.Remove(UpdateStatement.Length - 1, 1);
+			}
 			return UpdateStatement.ToString();
+		}
+
+		private string GetConnectionString()
+		{
+			if ( SqlAuthCB.Checked )
+			{
+				return string.Format(ConnectionStringUntrusted, serverAddressTextBox.Text, databaseDDL.SelectedItem??"master", userNameTextBox.Text, PasswordTextBox.Text);
+			}
+			else
+			{
+				return string.Format(ConnectionStringTrusted, serverAddressTextBox.Text??"master", databaseDDL.SelectedItem);
+			}
 		}
 	}
 }
