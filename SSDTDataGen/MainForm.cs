@@ -167,7 +167,16 @@ namespace SSDTDataGen
 		private string Values(SqlConnection connection, string tableName)
 		{
 			StringBuilder builder = new StringBuilder();
-			using (SqlDataAdapter adapter = new SqlDataAdapter("select * from " + tableName, connection))
+			string statement = string.Empty;
+			if (this.WhereTextBox.Text.Length > 0)
+			{
+				statement = "select * from " + tableName + " where " + WhereTextBox.Text;
+			}
+			else
+			{
+				statement = "select * from " + tableName;
+			}
+			using (SqlDataAdapter adapter = new SqlDataAdapter(statement, connection))
 			using (DataTable table = new DataTable(tableName))
 			{
 				adapter.Fill(table);
@@ -182,6 +191,12 @@ namespace SSDTDataGen
 							builder.Append("NULL");
 						}
 						else if (dr[dc].GetType() == Type.GetType("System.String"))
+						{
+							builder.Append("'");
+							builder.Append(dr[dc].ToString());
+							builder.Append("'");
+						}
+						else if (dr[dc].GetType() == Type.GetType("System.DateTime"))
 						{
 							builder.Append("'");
 							builder.Append(dr[dc].ToString());
@@ -236,12 +251,15 @@ namespace SSDTDataGen
 		private string GetJoinStatement(List<string> keys)
 		{
 			StringBuilder JoinStatement = new StringBuilder();
-			foreach (string column in keys)
+			if (keys.Count > 0)
 			{
-				JoinStatement.Append(string.Format("Source.{0} = Target.{0}", column));
-				JoinStatement.Append(" AND ");
+				foreach (string column in keys)
+				{
+					JoinStatement.Append(string.Format("Source.{0} = Target.{0}", column));
+					JoinStatement.Append(" AND ");
+				}
+				JoinStatement.Remove(JoinStatement.Length - 5, 5);
 			}
-			JoinStatement.Remove(JoinStatement.Length - 5, 5);
 			return JoinStatement.ToString();
 		}
 
