@@ -40,6 +40,8 @@
 			this.GenerateButton = new System.Windows.Forms.Button();
 			this.IdentityInsertCB = new System.Windows.Forms.CheckBox();
 			this.Step1Panel = new System.Windows.Forms.Panel();
+			this.PasswordTextBox = new System.Windows.Forms.TextBox();
+			this.userNameTextBox = new System.Windows.Forms.TextBox();
 			this.SqlAuthCB = new System.Windows.Forms.CheckBox();
 			this.Step1Label = new System.Windows.Forms.Label();
 			this.panel1 = new System.Windows.Forms.Panel();
@@ -47,8 +49,7 @@
 			this.WhereTextBox = new System.Windows.Forms.TextBox();
 			this.Step2Label = new System.Windows.Forms.Label();
 			this.Step3Label = new System.Windows.Forms.Label();
-			this.userNameTextBox = new System.Windows.Forms.TextBox();
-			this.PasswordTextBox = new System.Windows.Forms.TextBox();
+			this.SplitCheckBox = new System.Windows.Forms.CheckBox();
 			this.Step1Panel.SuspendLayout();
 			this.panel1.SuspendLayout();
 			this.SuspendLayout();
@@ -104,7 +105,6 @@
 			this.TableDDL.Name = "TableDDL";
 			this.TableDDL.Size = new System.Drawing.Size(357, 24);
 			this.TableDDL.TabIndex = 5;
-			this.TableDDL.SelectedIndexChanged += new System.EventHandler(this.TableDDL_SelectedIndexChanged);
 			// 
 			// databaseLabel
 			// 
@@ -135,7 +135,7 @@
 			// 
 			// GenerateButton
 			// 
-			this.GenerateButton.Location = new System.Drawing.Point(297, 637);
+			this.GenerateButton.Location = new System.Drawing.Point(405, 647);
 			this.GenerateButton.Name = "GenerateButton";
 			this.GenerateButton.Size = new System.Drawing.Size(128, 23);
 			this.GenerateButton.TabIndex = 9;
@@ -168,6 +168,20 @@
 			this.Step1Panel.Name = "Step1Panel";
 			this.Step1Panel.Size = new System.Drawing.Size(463, 266);
 			this.Step1Panel.TabIndex = 11;
+			// 
+			// PasswordTextBox
+			// 
+			this.PasswordTextBox.Location = new System.Drawing.Point(171, 131);
+			this.PasswordTextBox.Name = "PasswordTextBox";
+			this.PasswordTextBox.Size = new System.Drawing.Size(245, 22);
+			this.PasswordTextBox.TabIndex = 5;
+			// 
+			// userNameTextBox
+			// 
+			this.userNameTextBox.Location = new System.Drawing.Point(171, 64);
+			this.userNameTextBox.Name = "userNameTextBox";
+			this.userNameTextBox.Size = new System.Drawing.Size(245, 22);
+			this.userNameTextBox.TabIndex = 4;
 			// 
 			// SqlAuthCB
 			// 
@@ -241,25 +255,22 @@
 			this.Step3Label.TabIndex = 15;
 			this.Step3Label.Text = "Step 3:";
 			// 
-			// userNameTextBox
+			// SplitCheckBox
 			// 
-			this.userNameTextBox.Location = new System.Drawing.Point(171, 64);
-			this.userNameTextBox.Name = "userNameTextBox";
-			this.userNameTextBox.Size = new System.Drawing.Size(245, 22);
-			this.userNameTextBox.TabIndex = 4;
-			// 
-			// PasswordTextBox
-			// 
-			this.PasswordTextBox.Location = new System.Drawing.Point(171, 131);
-			this.PasswordTextBox.Name = "PasswordTextBox";
-			this.PasswordTextBox.Size = new System.Drawing.Size(245, 22);
-			this.PasswordTextBox.TabIndex = 5;
+			this.SplitCheckBox.AutoSize = true;
+			this.SplitCheckBox.Location = new System.Drawing.Point(176, 647);
+			this.SplitCheckBox.Name = "SplitCheckBox";
+			this.SplitCheckBox.Size = new System.Drawing.Size(90, 21);
+			this.SplitCheckBox.TabIndex = 16;
+			this.SplitCheckBox.Text = "Split Files";
+			this.SplitCheckBox.UseVisualStyleBackColor = true;
 			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(589, 751);
+			this.Controls.Add(this.SplitCheckBox);
 			this.Controls.Add(this.Step3Label);
 			this.Controls.Add(this.Step2Label);
 			this.Controls.Add(this.panel1);
@@ -301,6 +312,7 @@
 		private System.Windows.Forms.CheckBox SqlAuthCB;
 		private System.Windows.Forms.TextBox PasswordTextBox;
 		private System.Windows.Forms.TextBox userNameTextBox;
+		private System.Windows.Forms.CheckBox SplitCheckBox;
 	}
 }
 
